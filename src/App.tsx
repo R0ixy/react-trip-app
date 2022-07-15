@@ -5,8 +5,9 @@ import {Header} from "./components/header";
 import {Footer} from "./components/footer";
 import {SignIn} from "./components/sign-in";
 import {SignUp} from "./components/sign-up";
-import {MainPage} from "./components/mainPage";
+import {MainPage} from "./components/mainPage/components/tripList";
 import {Bookings} from "./components/bookings";
+import {Trip} from "./components/trip";
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
                 <Route path='/sign-in' element={<SignIn/>}/>
                 <Route path='/sign-up' element={<SignUp/>}/>
                 <Route path='/bookings' element={<Bookings/>}/>
+                <Route path='/trip/:id' element={<Trip />}/>
                 <Route path="*" element={<MainPage/>}/>
             </Routes>
             <Footer/>
