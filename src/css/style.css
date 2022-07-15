@@ -422,6 +422,10 @@ select {
 .sign-in-form__link:hover {
   color: var(--color-blue-300);
 }
+.warning{
+  color: red;
+  font-size: 10px;
+}
 
 /* main-page */
 
