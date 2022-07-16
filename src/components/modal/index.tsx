@@ -13,17 +13,24 @@ export const Modal = ({trip, setIsModalOpen}: iModalProps) => {
     const [totalPrice, setTotalPrice] = useState(trip.price);
     const [date, setDate] = useState('');
     const [dateWarning, setDateWarning] = useState(false);
+    const [guestsWarning, setGuestsWarning] = useState(false);
 
     const handleGuests = (e: ChangeEvent<HTMLInputElement>) => {
-        const price = +e.target.value;
-        if (price >= 1 && price <= 10) {
-            setGuests(price);
-            setTotalPrice(trip.price * price);
+        if (guestsWarning) {
+            setGuestsWarning(false);
         }
+        const guests = +e.target.value;
+        if (guests > 10 || guests < 1) {
+            setGuestsWarning(true);
+        } else {
+            setTotalPrice(trip.price * guests);
+        }
+
+        setGuests(guests);
     }
 
     const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
-        if (dateWarning){
+        if (dateWarning) {
             setDateWarning(false);
         }
         setDate(e.target.value);
@@ -31,11 +38,13 @@ export const Modal = ({trip, setIsModalOpen}: iModalProps) => {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        if (date) {
-            setIsModalOpen(false);
-        }else{
+        if (!date) {
             setDateWarning(true);
         }
+        if (date && !dateWarning && !guestsWarning) {
+            setIsModalOpen(false);
+        }
+
     }
 
     return (
@@ -69,6 +78,7 @@ export const Modal = ({trip, setIsModalOpen}: iModalProps) => {
                                value={guests}
                                onChange={handleGuests}
                                required/>
+                        {guestsWarning && <span className="warning">Number of guests must be 1 to 10!</span>}
                     </label>
                     <span className="trip-popup__total">
                         Total: <output className="trip-popup__total-value">{totalPrice}$</output>
