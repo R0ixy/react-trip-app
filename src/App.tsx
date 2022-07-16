@@ -6,7 +6,7 @@ import {Footer} from "./components/footer";
 import {SignIn} from "./components/sign-in";
 import {SignUp} from "./components/sign-up";
 import {MainPage} from "./components/mainPage/components/tripList";
-import {Bookings} from "./components/bookings";
+import {Bookings} from "./components/bookings/components/bookingsList";
 import {Trip} from "./components/trip";
 
 
