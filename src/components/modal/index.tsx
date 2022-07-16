@@ -1,28 +1,79 @@
-export const Modal = () => {
-    return(
+import {ChangeEvent, FormEvent, useState} from "react";
+import {iTrip} from "../mainPage/interfaces/iTrip";
+import * as React from "react";
+
+
+interface iModalProps {
+    trip: iTrip;
+    setIsModalOpen: (value: boolean) => void;
+}
+
+export const Modal = ({trip, setIsModalOpen}: iModalProps) => {
+    const [guests, setGuests] = useState(1);
+    const [totalPrice, setTotalPrice] = useState(trip.price);
+    const [date, setDate] = useState('');
+    const [dateWarning, setDateWarning] = useState(false);
+
+    const handleGuests = (e: ChangeEvent<HTMLInputElement>) => {
+        const price = +e.target.value;
+        if (price >= 1 && price <= 10) {
+            setGuests(price);
+            setTotalPrice(trip.price * price);
+        }
+    }
+
+    const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
+        if (dateWarning){
+            setDateWarning(false);
+        }
+        setDate(e.target.value);
+    }
+
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+        if (date) {
+            setIsModalOpen(false);
+        }else{
+            setDateWarning(true);
+        }
+    }
+
+    return (
         <div className="modal">
             <div className="trip-popup">
-                <button className="trip-popup__close">×</button>
+                <button className="trip-popup__close"
+                        onClick={() => {
+                            setIsModalOpen(false)
+                        }}>×
+                </button>
                 <form className="trip-popup__form" autoComplete="off">
                     <div className="trip-info">
-                        <h3 className="trip-info__title">Iceland</h3>
+                        <h3 className="trip-info__title">{trip.title}</h3>
                         <div className="trip-info__content">
-                            <span className="trip-info__duration"><strong>15</strong> days</span>
-                            <span className="trip-info__level">easy</span>
+                            <span className="trip-info__duration"><strong>{trip.duration}</strong> days</span>
+                            <span className="trip-info__level">{trip.level}</span>
                         </div>
                     </div>
                     <label className="trip-popup__input input">
                         <span className="input__heading">Date</span>
-                        <input name="date" type="date" required/>
+                        <input name="date" type="date"
+                               min={new Date().toLocaleDateString('en-ca')}
+                               value={date}
+                               onChange={handleDate} required/>
+                        {dateWarning && <span className="warning">Date filed is required!</span>}
                     </label>
                     <label className="trip-popup__input input">
                         <span className="input__heading">Number of guests</span>
-                        <input name="guests" type="number" min="1" max="10" value="1" required/>
+                        <input name="guests" type="number"
+                               min="1" max="10"
+                               value={guests}
+                               onChange={handleGuests}
+                               required/>
                     </label>
                     <span className="trip-popup__total">
-              Total: <output className="trip-popup__total-value">4000$</output>
-            </span>
-                    <button className="button" type="submit">Book a trip</button>
+                        Total: <output className="trip-popup__total-value">{totalPrice}$</output>
+                    </span>
+                    <button className="button" type="submit" onClick={handleSubmit}>Book a trip</button>
                 </form>
             </div>
         </div>

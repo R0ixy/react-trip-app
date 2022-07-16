@@ -1,15 +1,19 @@
 import {useParams} from 'react-router-dom';
+import {useState} from "react";
 import trips from '../../data/trips.json';
 import {iTrip} from "../mainPage/interfaces/iTrip";
+import {Modal} from "../modal";
 
 export const Trip = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const {id} = useParams();
     const trip = trips.find((trip) => trip.id === id) as iTrip;
+
     return (
         <main className="trip-page">
             <h1 className="visually-hidden">Travel App</h1>
             <div className="trip">
-                <img src={trip.image} className="trip__img" alt="trip image"/>
+                <img src={trip.image} className="trip__img" alt="trip"/>
                 <div className="trip__content">
                     <div className="trip-info">
                         <h3 className="trip-info__title">{trip.title}</h3>
@@ -25,7 +29,8 @@ export const Trip = () => {
                         <span>Price</span>
                         <strong className="trip-price__value">{trip.price} $</strong>
                     </div>
-                    <button className="trip__button button">Book a trip</button>
+                    <button className="trip__button button" onClick={() => setIsModalOpen(true)}>Book a trip</button>
+                    {isModalOpen && <Modal trip={trip} setIsModalOpen={setIsModalOpen}/>}
                 </div>
             </div>
         </main>
