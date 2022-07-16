@@ -487,6 +487,10 @@ select {
   border-radius: 1px;
   box-shadow: var(--shadow);
 }
+.trip-card img{
+  height: 100%;
+  object-fit: cover;
+}
 
 .trip-card__content {
   display: flex;
