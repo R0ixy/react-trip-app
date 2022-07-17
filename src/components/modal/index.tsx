@@ -9,7 +9,7 @@ interface iModalProps {
 }
 
 export const Modal = ({trip, setIsModalOpen}: iModalProps) => {
-    const [guests, setGuests] = useState(1);
+    const [guests, setGuests] = useState('1');
     const [totalPrice, setTotalPrice] = useState(trip.price);
     const [date, setDate] = useState('');
     const [dateWarning, setDateWarning] = useState(false);
@@ -19,11 +19,11 @@ export const Modal = ({trip, setIsModalOpen}: iModalProps) => {
         if (guestsWarning) {
             setGuestsWarning(false);
         }
-        const guests = +e.target.value;
-        if (guests > 10 || guests < 1) {
+        const guests = e.target.value;
+        if (+guests > 10 || +guests < 1) {
             setGuestsWarning(true);
         } else {
-            setTotalPrice(trip.price * guests);
+            setTotalPrice(trip.price * +guests);
         }
 
         setGuests(guests);
