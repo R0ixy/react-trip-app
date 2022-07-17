@@ -1,16 +1,17 @@
+import {useState} from "react";
 import trips from '../../../../data/trips.json';
 import {TripCard} from "../tripCard";
 import {FilterTrips} from "../filterTrips";
-import {useState} from "react";
 import {getFilteredTrips} from "../../helpers/get-filtered-trips.helper"
 import {iFilterValues} from "../../interfaces/iFilterValues";
+import {iTrip} from "../../interfaces/iTrip";
 import {DEFAULT_FILTER_VALUES} from "../../constants/filterValues";
 
 
 export const MainPage = () => {
     const [filterValues, setFilterValue] = useState(DEFAULT_FILTER_VALUES);
 
-    const filteredTrips = getFilteredTrips(trips, filterValues);
+    const filteredTrips: iTrip[] = getFilteredTrips(trips, filterValues);
 
     const handleFilterChange = (value: iFilterValues) => setFilterValue(value);
 
