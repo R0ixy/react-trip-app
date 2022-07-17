@@ -1,6 +1,6 @@
 import React from 'react';
 import './css/style.css';
-import {Routes, Route} from 'react-router-dom';
+import {Routes, Route, Navigate} from 'react-router-dom';
 import {Header} from "./components/header";
 import {Footer} from "./components/footer";
 import {SignIn} from "./components/sign-in";
@@ -15,11 +15,13 @@ function App() {
         <>
             <Header/>
             <Routes>
+                <Route path="/" element={<MainPage/>}/>
                 <Route path='/sign-in' element={<SignIn/>}/>
                 <Route path='/sign-up' element={<SignUp/>}/>
                 <Route path='/bookings' element={<Bookings/>}/>
-                <Route path='/trip/:id' element={<Trip />}/>
-                <Route path="*" element={<MainPage/>}/>
+                <Route path='/trip/:id' element={<Trip/>}/>
+
+                <Route path="*" element={<Navigate to={'/'}/>}/>
             </Routes>
             <Footer/>
         </>
