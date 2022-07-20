@@ -1,11 +1,20 @@
 import {Link} from 'react-router-dom';
 import briefcase from '../../images/briefcase.svg';
-import user from '../../images/user.svg';
-import {useLocation, useNavigate} from 'react-router-dom';
-import {useState, useEffect} from "react";
+import userImg from '../../images/user.svg';
+import {useLocation, useNavigate, Navigate} from 'react-router-dom';
+import {useState, useEffect, useCallback} from "react";
+import {useAppDispatch, useAppSelector} from "../../hooks/typedReduxHooks";
+import {auth as authActionCreator} from "../../store/actions";
+
 
 const Nav = () => {
     let navigate = useNavigate();
+
+    const {user, status} = useAppSelector((state) => state.auth);
+
+    if (status === 'error') {
+        return (<Navigate to="/sign-in" replace={true}/>);
+    }
 
     const onSignOut = () => {
         navigate("/sign-in", {replace: true});
@@ -23,9 +32,9 @@ const Nav = () => {
                 <li className="nav-header__item" title="Profile">
                     <div className="nav-header__inner profile-nav" tabIndex={0}>
                         <span className="visually-hidden">Profile</span>
-                        <img src={user} alt="profile icon"/>
+                        <img src={userImg} alt="profile icon"/>
                         <ul className="profile-nav__list">
-                            <li className="profile-nav__item profile-nav__username">John Doe</li>
+                            <li className="profile-nav__item profile-nav__username">{user.fullName}</li>
                             <li className="profile-nav__item">
                                 <button className="profile-nav__sign-out button" onClick={onSignOut}>Sign Out</button>
                             </li>
@@ -38,7 +47,7 @@ const Nav = () => {
 }
 
 export const Header = () => {
-    const [isNavShown, setIsNavShown] = useState(true);
+    const [isNavShown, setIsNavShown] = useState(false);
     const location = useLocation();
     useEffect(() => {
         if (location.pathname === '/sign-in' || location.pathname === '/sign-up') {
@@ -47,6 +56,17 @@ export const Header = () => {
             setIsNavShown(true);
         }
     }, [location]);
+
+
+    const dispatch = useAppDispatch();
+
+    const getUser = useCallback(() => {
+        dispatch(authActionCreator.getAuthenticatedUser());
+    }, [dispatch]);
+
+    useEffect(() => {
+        getUser();
+    },[getUser]);
 
 
     return (
