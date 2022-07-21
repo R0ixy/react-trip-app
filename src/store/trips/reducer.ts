@@ -1,6 +1,6 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {DataStatus} from "../../common/app/data-status.enum";
-import {fetchTrips} from "./actions";
+import {fetchTrips, fetchOneTrip} from "./actions";
 import {iTrip} from "../../components/mainPage/interfaces/iTrip";
 
 const initialState = {
@@ -18,4 +18,14 @@ export const reducer = createReducer(initialState, (builder) => {
         state.trips = trips;
         state.status = DataStatus.SUCCESS;
     });
+
+    builder.addCase(fetchOneTrip.pending, (state) => {
+        state.status = DataStatus.PENDING;
+    });
+    builder.addCase(fetchOneTrip.fulfilled, (state, {payload}) => {
+        const {trip} = payload;
+        state.trips = [trip];
+        state.status = DataStatus.SUCCESS;
+    });
+
 });

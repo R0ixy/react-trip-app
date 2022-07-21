@@ -8,3 +8,8 @@ export const fetchTrips = createAsyncThunk<{ trips: iTrip[] }, void, { extra: { 
 (ActionType.FETCH_TRIPS, async (_args, {extra}) => ({
     trips: await extra.tripsService.getAll()
 }));
+
+export const fetchOneTrip = createAsyncThunk<{ trip: iTrip }, {id: string }, { extra: { tripsService: TripsService } }>
+(ActionType.FETCH_ONE, async ({id}, {extra}) => ({
+    trip: await extra.tripsService.getById(id)
+}));

@@ -1,30 +1,32 @@
 import {HttpMethod} from "../../common/http/http-method.enum";
+import {BaseService} from "../base/base.service";
 import {Http} from "../http/http.service";
-//
-// interface ITripsService {
-//     baseUrl: string;
-//     http: Http;
-// }
 
-export class TripsService {
-    private _baseUrl: string;
-    private _http: Http;
-    private _basePath: string;
 
-    constructor(baseUrl:string, http:Http) {
-        this._baseUrl = baseUrl;
-        this._http = http;
+export class TripsService extends BaseService {
+
+    constructor(baseUrl: string, http: Http) {
+        super(baseUrl, http);
         this._basePath = '/trips';
     }
 
     getAll() {
-        return this._http.load(this._getUrl(), {
+        const token = this.getToken();
+        return this._http.load(this.getUrl(), {
+
             method: HttpMethod.GET,
+            currentHeaders: {auth: `Bearer ${token}`},
+        });
+    }
+
+    getById(id: string) {
+        const token = this.getToken();
+        return this._http.load(this.getUrl(`/${id}`), {
+
+            method: HttpMethod.GET,
+            currentHeaders: {auth: `Bearer ${token}`},
         });
     }
 
 
-    private _getUrl(path = ''): string {
-        return `${this._baseUrl}${this._basePath}/${path}`;
-    }
 }

@@ -1,5 +1,5 @@
 const ActionType = {
-    FETCH_TRIPS: '/trips',
+    FETCH_TRIPS: '/fetch-trips',
     FETCH_ONE: '/trip',
 }
 
