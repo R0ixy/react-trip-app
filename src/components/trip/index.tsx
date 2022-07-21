@@ -1,13 +1,34 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useParams, Navigate} from 'react-router-dom';
 import {Modal} from "../modal";
-import trips from '../../data/trips.json';
+// import trips from '../../data/trips.json';
 import {iTrip} from "../mainPage/interfaces/iTrip";
+import {useAppDispatch, useAppSelector} from "../../hooks/typedReduxHooks";
+import {trips as tripsActionCreator} from "../../store/actions";
+import {DataStatus} from "../../common/app/data-status.enum";
+import {Loader} from "../loader";
 
 export const Trip = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const {id} = useParams();
-    const trip: iTrip | undefined = trips.find((trip) => trip.id === id);
+    const dispatch = useAppDispatch();
+
+    const {trip, status} = useAppSelector(({trips}) => ({
+        trip: trips.trips[0],
+        status: trips.status,
+    }));
+
+    useEffect(() => {
+        if (id) {
+            dispatch(tripsActionCreator.fetchOneTrip({id}));
+        }
+    }, [dispatch, id]);
+
+
+    if(status === DataStatus.PENDING) {
+        return (<Loader />);
+    }
+    // const trip: iTrip | undefined = trips.find((trip) => trip.id === id);
 
 
     if (!trip) {

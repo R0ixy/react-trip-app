@@ -1,20 +1,44 @@
-import {useState} from "react";
-import trips from '../../../../data/trips.json';
+import {useState, useEffect} from "react";
+// import trips from '../../../../data/trips.json';
 import {TripCard} from "../tripCard";
 import {FilterTrips} from "../filterTrips";
 import {getFilteredTrips} from "../../helpers/get-filtered-trips.helper"
 import {iFilterValues} from "../../interfaces/iFilterValues";
 import {iTrip} from "../../interfaces/iTrip";
 import {DEFAULT_FILTER_VALUES} from "../../constants/filterValues";
+import {useAppDispatch, useAppSelector} from "../../../../hooks/typedReduxHooks";
+import {trips as tripsActionCreator} from "../../../../store/actions";
+import {Loader} from "../../../loader";
+import {DataStatus} from "../../../../common/app/data-status.enum";
 
 
 export const MainPage = () => {
     const [filterValues, setFilterValue] = useState(DEFAULT_FILTER_VALUES);
+    const dispatch = useAppDispatch();
+
+    const user = useAppSelector((state) => state.auth.user);
+    const { trips, status } = useAppSelector((state) => state.trips);
+
+    // const { trips, status } = useAppSelector(({ trips }) => ({
+    //     trips: trips.trips,
+    //     status: trips.status,
+    // }));
+
 
     const filteredTrips: iTrip[] = getFilteredTrips(trips, filterValues);
 
     const handleFilterChange = (value: iFilterValues) => setFilterValue(value);
 
+
+    useEffect(() => {
+        if (user) {
+            dispatch(tripsActionCreator.fetchTrips());
+        }
+    }, [dispatch, user]);
+
+    if (status === DataStatus.PENDING) {
+        return <Loader />;
+    }
 
     return (
         <main>
