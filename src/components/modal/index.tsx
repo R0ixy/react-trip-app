@@ -2,8 +2,6 @@ import React, {ChangeEvent, FormEvent, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../hooks/typedReduxHooks";
 import {iTrip} from "../../interfaces/trips/iTrip";
 import {bookings as bookingsActionCreator} from "../../store/actions";
-import {showNotification} from "../../common/toastr/toastr";
-
 
 interface iModalProps {
     trip: iTrip;
@@ -21,7 +19,6 @@ export const Modal = ({trip, setIsModalOpen}: iModalProps) => {
 
     const {user} = useAppSelector(({auth}) => ({
         user: auth.user,
-        // authStatus: auth.status,
     }));
 
 
@@ -57,14 +54,7 @@ export const Modal = ({trip, setIsModalOpen}: iModalProps) => {
                 userId: user.id,
                 guests: +guests,
                 date
-            })).unwrap()
-                .then(() => {
-                    showNotification(`Booking was successfully added`, 'success');
-                })
-                .catch((e) => {
-                    showNotification(`Error: ${e.message}`, 'error');
-                });
-
+            }));
             setIsModalOpen(false);
         }
 

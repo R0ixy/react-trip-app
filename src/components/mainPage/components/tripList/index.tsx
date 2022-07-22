@@ -1,5 +1,4 @@
 import {useState, useEffect} from "react";
-// import trips from '../../../../data/trips.json';
 import {TripCard} from "../tripCard";
 import {FilterTrips} from "../filterTrips";
 import {getFilteredTrips} from "../../helpers/get-filtered-trips.helper"
@@ -10,7 +9,6 @@ import {useAppDispatch, useAppSelector} from "../../../../hooks/typedReduxHooks"
 import {trips as tripsActionCreator} from "../../../../store/actions";
 import {Loader} from "../../../loader";
 import {DataStatus} from "../../../../common/app/data-status.enum";
-import {showNotification} from "../../../../common/toastr/toastr";
 
 
 export const MainPage = () => {
@@ -31,10 +29,8 @@ export const MainPage = () => {
 
 
     useEffect(() => {
-        if (user) {
-            dispatch(tripsActionCreator.fetchTrips()).unwrap().catch(e => {
-                showNotification(`Error: ${e.message}`, 'error');
-            });
+        if (user.id) {
+            dispatch(tripsActionCreator.fetchTrips());
         }
     }, [dispatch, user]);
 

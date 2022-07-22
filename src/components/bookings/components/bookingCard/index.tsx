@@ -1,8 +1,7 @@
 import {iBooking} from "../../../../interfaces/bookings/iBooking";
 import {bookings as bookingsActionCreator} from "../../../../store/actions";
-import {useAppDispatch, useAppSelector} from "../../../../hooks/typedReduxHooks";
+import {useAppDispatch} from "../../../../hooks/typedReduxHooks";
 import React from "react";
-import {showNotification} from "../../../../common/toastr/toastr";
 
 interface iBookingCardProps {
     booking: iBooking;
@@ -12,9 +11,7 @@ export const BookingCard = ({booking}: iBookingCardProps) => {
     const dispatch = useAppDispatch();
 
     const handleCancel = () => {
-        dispatch(bookingsActionCreator.deleteBooking(booking.id)).unwrap().catch((e)=>{
-            showNotification(`Error ${e.message}`, 'error');
-        });
+        dispatch(bookingsActionCreator.deleteBooking(booking.id))
     }
 
     return (

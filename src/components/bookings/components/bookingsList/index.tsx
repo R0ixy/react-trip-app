@@ -4,7 +4,6 @@ import {BookingCard} from "../bookingCard";
 import {Loader} from "../../../loader";
 import {bookings as bookingsActionCreator} from "../../../../store/actions";
 import {iBooking} from "../../../../interfaces/bookings/iBooking";
-import {showNotification} from "../../../../common/toastr/toastr";
 
 
 export const Bookings = () => {
@@ -19,9 +18,7 @@ export const Bookings = () => {
     )
 
     useEffect(() => {
-        dispatch(bookingsActionCreator.fetchBookings()).unwrap().catch(e => {
-            showNotification(`Error: ${e.message}`, 'error');
-        });
+        dispatch(bookingsActionCreator.fetchBookings())
     }, [dispatch]);
 
 
