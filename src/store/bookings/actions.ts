@@ -11,14 +11,18 @@ export const fetchBookings = createAsyncThunk<{ bookings: iBooking[] }, void, { 
 }));
 
 export const addBooking = createAsyncThunk<{ booking: iBooking }, iCreateBooking, { extra: { bookingsService: BookingsService } }>
-(ActionType.ADD_BOOKING, async ({tripId, userId, guests, date}, {extra}) => ({
-    booking: await extra.bookingsService.create({tripId, userId, guests, date})
-}));
+(ActionType.ADD_BOOKING, async ({tripId, userId, guests, date}, {extra}) => {
+    const booking = await extra.bookingsService.create({tripId, userId, guests, date});
+    showNotification(`Trip was successfully booked`, 'success');
+    return({
+        booking: booking
+    })
+});
 
 export const deleteBooking = createAsyncThunk<{ bookingId: string }, string, { extra: { bookingsService: BookingsService } }>
 (ActionType.DELETE_BOOKING, async (bookingId, {extra}) => {
     await extra.bookingsService.delete(bookingId)
-    showNotification('Booking deleted', 'success');
+    showNotification('Booking was deleted', 'success');
     return ({
         bookingId: bookingId
     })
