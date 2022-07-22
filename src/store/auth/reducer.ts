@@ -1,11 +1,14 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {DataStatus} from "../../common/app/data-status.enum";
-import {ActionStatus} from "../../common/app/action-status.enum";
 import {getAuthenticatedUser, signIn, signUp} from "./actions";
 import {iUser} from "../../interfaces/auth/iUser";
 
+interface iInitialState {
+    user: iUser,
+    status: string,
+}
 
-const initialState = {
+const initialState: iInitialState = {
     user: {} as iUser,
     status: DataStatus.IDLE,
 };
@@ -32,10 +35,5 @@ export const reducer = createReducer(initialState, (builder) => {
         state.user = result.user;
         localStorage.setItem('token', result.token);
         state.status = DataStatus.SUCCESS;
-    });
-
-    builder.addMatcher((action) => action.type.endsWith(ActionStatus.REJECTED), (state) => {
-        console.log('auth matcher');
-        state.status = 'auth/error';
     });
 });

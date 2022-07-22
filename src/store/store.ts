@@ -1,12 +1,13 @@
 import {configureStore} from "@reduxjs/toolkit";
 import {tripsService, authService, bookingsService} from '../services/services';
-import {trips, auth, bookings} from "./root-reducer";
+import {trips, auth, bookings, errors} from "./root-reducer";
 
 const store = configureStore({
     reducer: {
         trips,
         auth,
-        bookings
+        bookings,
+        errors,
     },
 
     middleware: (getDefaultMiddleware)=>{
