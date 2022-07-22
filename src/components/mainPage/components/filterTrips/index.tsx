@@ -1,5 +1,5 @@
 import React from "react";
-import {iFilterValues} from "../../interfaces/iFilterValues";
+import {iFilterValues} from "../../../../interfaces/trips/iFilterValues";
 
 interface iFilterProps {
     values: iFilterValues;

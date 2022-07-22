@@ -1,5 +1,5 @@
-import {iTrip} from "../interfaces/iTrip";
-import {iFilterValues} from "../interfaces/iFilterValues";
+import {iTrip} from "../../../interfaces/trips/iTrip";
+import {iFilterValues} from "../../../interfaces/trips/iFilterValues";
 import {DEFAULT_FILTER_VALUE} from "../constants/filterValues";
 
 

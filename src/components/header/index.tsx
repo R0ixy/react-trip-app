@@ -5,20 +5,47 @@ import {useLocation, useNavigate, Navigate} from 'react-router-dom';
 import {useState, useEffect, useCallback} from "react";
 import {useAppDispatch, useAppSelector} from "../../hooks/typedReduxHooks";
 import {auth as authActionCreator} from "../../store/actions";
+import {toast} from "react-toastify";
+import {DataStatus} from "../../common/app/data-status.enum";
 
 
 const Nav = () => {
     let navigate = useNavigate();
 
-    const {user, status} = useAppSelector((state) => state.auth);
+    const dispatch = useAppDispatch();
+    const {user, status} = useAppSelector(({auth}) => ({
+        user: auth.user,
+        status: auth.status,
+    }));
 
-    if (status === 'error') {
+
+    useEffect(() => {
+        dispatch(authActionCreator.getAuthenticatedUser())
+            // .unwrap()
+            // .catch(e => {
+            // if (e.message === '401') {
+            //     navigate("/sign-in", {replace: true});
+            // }
+        // });
+    }, [dispatch, navigate]);
+
+    toast.onChange((payload) => {
+        if (payload.content ==='Error: 401') {
+            navigate("/sign-in", {replace: true});
+        }
+    });
+
+
+    const onSignOut = () => {
+        localStorage.removeItem("token");
+        navigate("/sign-in", {replace: true});
+    }
+
+    if (status === 'auth/error') {
+        console.log(status);
         return (<Navigate to="/sign-in" replace={true}/>);
     }
 
-    const onSignOut = () => {
-        navigate("/sign-in", {replace: true});
-    }
 
     return (
         <nav className="header__nav">
@@ -56,17 +83,6 @@ export const Header = () => {
             setIsNavShown(true);
         }
     }, [location]);
-
-
-    const dispatch = useAppDispatch();
-
-    const getUser = useCallback(() => {
-        dispatch(authActionCreator.getAuthenticatedUser());
-    }, [dispatch]);
-
-    useEffect(() => {
-        getUser();
-    },[getUser]);
 
 
     return (

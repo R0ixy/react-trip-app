@@ -3,8 +3,9 @@ import {Link} from 'react-router-dom';
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useHandleSignForm} from "../../hooks/useHandleSignForm";
-import {useAppDispatch, useAppSelector} from "../../hooks/typedReduxHooks";
+import {useAppDispatch} from "../../hooks/typedReduxHooks";
 import {auth as authActionCreator} from "../../store/actions";
+import {showNotification} from "../../common/toastr/toastr";
 
 
 export const SignUp = () => {
@@ -14,7 +15,6 @@ export const SignUp = () => {
     const {useEmail, usePassword} = useHandleSignForm();
     const {email, emailWarning, setEmailWarning, handleEmailChange} = useEmail;
     const {password, passwordWarning, setPasswordWarning, handlePasswordChange} = usePassword;
-    const authState = useAppSelector(state => state.auth);
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -39,10 +39,12 @@ export const SignUp = () => {
         }
 
         if (!nameWarning && !emailWarning && !passwordWarning && name && email && password) {
-            dispatch(authActionCreator.signUp({fullName: name, email, password}));
-            if (authState.status === 'success') {
-                navigate('/', {replace: true});
-            }
+            dispatch(authActionCreator.signUp({fullName: name, email, password}))
+                .unwrap()
+                .then(() => navigate('/', {replace: true}))
+                .catch((e) => {
+                    showNotification(`Error: ${e.message}`, 'error');
+                });
         }
     }
 

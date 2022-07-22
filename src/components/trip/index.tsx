@@ -1,17 +1,17 @@
 import {useEffect, useState} from "react";
-import {useParams, Navigate} from 'react-router-dom';
-import {Modal} from "../modal";
-// import trips from '../../data/trips.json';
-import {iTrip} from "../mainPage/interfaces/iTrip";
+import {useParams, useNavigate, Navigate} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from "../../hooks/typedReduxHooks";
-import {trips as tripsActionCreator} from "../../store/actions";
-import {DataStatus} from "../../common/app/data-status.enum";
+import {Modal} from "../modal";
 import {Loader} from "../loader";
+import {DataStatus} from "../../common/app/data-status.enum";
+import {trips as tripsActionCreator} from "../../store/actions";
+import {showNotification} from "../../common/toastr/toastr";
 
 export const Trip = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const {id} = useParams();
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const {trip, status} = useAppSelector(({trips}) => ({
         trip: trips.trips[0],
@@ -20,22 +20,21 @@ export const Trip = () => {
 
     useEffect(() => {
         if (id) {
-            dispatch(tripsActionCreator.fetchOneTrip({id}));
+            dispatch(tripsActionCreator.fetchOneTrip({id}))
+                .unwrap()
+                .catch(e => {
+                    if (e.message === '404') {
+                        showNotification(`Page not found`, 'error');
+                    }
+                });
         }
-    }, [dispatch, id]);
+    }, [dispatch, id, navigate]);
 
-
-    if(status === DataStatus.PENDING) {
-        return (<Loader />);
-    }
-    // const trip: iTrip | undefined = trips.find((trip) => trip.id === id);
-
-
-    if (!trip) {
+    if(status === DataStatus.ERROR) {
         return (<Navigate to="/" replace={true}/>);
+    }
 
-    } else {
-
+    if (status === DataStatus.SUCCESS) {
         return (
             <main className="trip-page">
                 <h1 className="visually-hidden">Travel App</h1>
@@ -63,5 +62,7 @@ export const Trip = () => {
                 </div>
             </main>
         );
+    } else {
+        return (<Loader/>);
     }
 }

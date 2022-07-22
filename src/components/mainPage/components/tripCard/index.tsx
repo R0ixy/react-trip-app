@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {iTrip} from "../../interfaces/iTrip";
+import {iTrip} from "../../../../interfaces/trips/iTrip";
 import * as React from "react";
 
 

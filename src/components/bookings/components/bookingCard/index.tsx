@@ -1,15 +1,20 @@
-import {iBooking} from "../../interfaces/iBooking";
+import {iBooking} from "../../../../interfaces/bookings/iBooking";
+import {bookings as bookingsActionCreator} from "../../../../store/actions";
+import {useAppDispatch, useAppSelector} from "../../../../hooks/typedReduxHooks";
+import React from "react";
+import {showNotification} from "../../../../common/toastr/toastr";
 
 interface iBookingCardProps {
-    canceled: string[];
     booking: iBooking;
-    setCanceled: (id: string[]) => void;
 }
 
-export const BookingCard = ({canceled, booking, setCanceled}: iBookingCardProps) => {
+export const BookingCard = ({booking}: iBookingCardProps) => {
+    const dispatch = useAppDispatch();
 
     const handleCancel = () => {
-        setCanceled([...canceled, booking.id]);
+        dispatch(bookingsActionCreator.deleteBooking(booking.id)).unwrap().catch((e)=>{
+            showNotification(`Error ${e.message}`, 'error');
+        });
     }
 
     return (

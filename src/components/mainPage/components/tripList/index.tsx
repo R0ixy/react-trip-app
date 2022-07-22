@@ -3,13 +3,14 @@ import {useState, useEffect} from "react";
 import {TripCard} from "../tripCard";
 import {FilterTrips} from "../filterTrips";
 import {getFilteredTrips} from "../../helpers/get-filtered-trips.helper"
-import {iFilterValues} from "../../interfaces/iFilterValues";
-import {iTrip} from "../../interfaces/iTrip";
+import {iFilterValues} from "../../../../interfaces/trips/iFilterValues";
+import {iTrip} from "../../../../interfaces/trips/iTrip";
 import {DEFAULT_FILTER_VALUES} from "../../constants/filterValues";
 import {useAppDispatch, useAppSelector} from "../../../../hooks/typedReduxHooks";
 import {trips as tripsActionCreator} from "../../../../store/actions";
 import {Loader} from "../../../loader";
 import {DataStatus} from "../../../../common/app/data-status.enum";
+import {showNotification} from "../../../../common/toastr/toastr";
 
 
 export const MainPage = () => {
@@ -17,12 +18,11 @@ export const MainPage = () => {
     const dispatch = useAppDispatch();
 
     const user = useAppSelector((state) => state.auth.user);
-    const { trips, status } = useAppSelector((state) => state.trips);
 
-    // const { trips, status } = useAppSelector(({ trips }) => ({
-    //     trips: trips.trips,
-    //     status: trips.status,
-    // }));
+    const { trips, status } = useAppSelector(({ trips }) => ({
+        trips: trips.trips,
+        status: trips.status,
+    }));
 
 
     const filteredTrips: iTrip[] = getFilteredTrips(trips, filterValues);
@@ -32,7 +32,9 @@ export const MainPage = () => {
 
     useEffect(() => {
         if (user) {
-            dispatch(tripsActionCreator.fetchTrips());
+            dispatch(tripsActionCreator.fetchTrips()).unwrap().catch(e => {
+                showNotification(`Error: ${e.message}`, 'error');
+            });
         }
     }, [dispatch, user]);
 

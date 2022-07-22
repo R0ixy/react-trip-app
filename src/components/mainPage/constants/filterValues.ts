@@ -1,4 +1,4 @@
-import {iFilterValues} from "../interfaces/iFilterValues";
+import {iFilterValues} from "../../../interfaces/trips/iFilterValues";
 
 export const DEFAULT_FILTER_VALUES: iFilterValues = {
     search: '',

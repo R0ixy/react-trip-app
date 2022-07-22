@@ -1,6 +1,8 @@
-import {ChangeEvent, FormEvent, useState} from "react";
-import {iTrip} from "../mainPage/interfaces/iTrip";
-import * as React from "react";
+import React, {ChangeEvent, FormEvent, useState} from "react";
+import {useAppDispatch, useAppSelector} from "../../hooks/typedReduxHooks";
+import {iTrip} from "../../interfaces/trips/iTrip";
+import {bookings as bookingsActionCreator} from "../../store/actions";
+import {showNotification} from "../../common/toastr/toastr";
 
 
 interface iModalProps {
@@ -14,6 +16,14 @@ export const Modal = ({trip, setIsModalOpen}: iModalProps) => {
     const [date, setDate] = useState('');
     const [dateWarning, setDateWarning] = useState(false);
     const [guestsWarning, setGuestsWarning] = useState(false);
+
+    const dispatch = useAppDispatch();
+
+    const {user} = useAppSelector(({auth}) => ({
+        user: auth.user,
+        // authStatus: auth.status,
+    }));
+
 
     const handleGuests = (e: ChangeEvent<HTMLInputElement>) => {
         if (guestsWarning) {
@@ -42,6 +52,19 @@ export const Modal = ({trip, setIsModalOpen}: iModalProps) => {
             setDateWarning(true);
         }
         if (date && !dateWarning && !guestsWarning) {
+            dispatch(bookingsActionCreator.addBooking({
+                tripId: trip.id,
+                userId: user.id,
+                guests: +guests,
+                date
+            })).unwrap()
+                .then(() => {
+                    showNotification(`Booking was successfully added`, 'success');
+                })
+                .catch((e) => {
+                    showNotification(`Error: ${e.message}`, 'error');
+                });
+
             setIsModalOpen(false);
         }
 
