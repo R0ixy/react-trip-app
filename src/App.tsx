@@ -2,7 +2,7 @@ import React from 'react';
 import './css/style.css';
 import 'react-toastify/dist/ReactToastify.css';
 import {Routes, Route, Navigate} from 'react-router-dom';
-import {Header} from "./components/header";
+import {Header} from "./components/header/components/headerContainer";
 import {Footer} from "./components/footer";
 import {SignIn} from "./components/sign-in";
 import {SignUp} from "./components/sign-up";
