@@ -1,7 +1,5 @@
-import * as React from 'react';
-import {Link} from 'react-router-dom';
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import  React, {useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import {useHandleSignForm} from "../../hooks/useHandleSignForm";
 import {useAppDispatch} from "../../hooks/typedReduxHooks";
 import {auth as authActionCreator} from "../../store/actions";

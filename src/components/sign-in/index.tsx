@@ -26,14 +26,16 @@ export const SignIn = () => {
         if (!emailWarning && !passwordWarning && email && password) {
             dispatch(authActionCreator.signIn({email, password}))
                 .unwrap()
-                .then(()=>navigate('/', {replace: true}))
-                .catch((e)=>{
-                    if (e.message==='401') {
+                .then(() => {
+                    navigate('/', {replace: true})
+                })
+                .catch((e) => {
+                    if (e.message === '401') {
                         showNotification('Wrong email or password!', 'error');
-                    }else{
+                    } else {
                         showNotification(`Error: ${e.message}`, 'error');
                     }
-            });
+                });
         }
     }
 
