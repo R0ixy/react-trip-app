@@ -22,6 +22,9 @@ export const reducer = createReducer(initialState, (builder) => {
         state.user = user;
         state.status = DataStatus.SUCCESS;
     });
+    builder.addCase(getAuthenticatedUser.rejected, (state) => {
+        state.status = DataStatus.ERROR;
+    });
 
     builder.addCase(signUp.fulfilled, (state, {payload}) => {
         const {result} = payload;
