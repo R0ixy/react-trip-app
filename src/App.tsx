@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './css/style.css';
 import 'react-toastify/dist/ReactToastify.css';
 import {Routes, Route, Navigate} from 'react-router-dom';
@@ -10,13 +10,31 @@ import {MainPage} from "./components/mainPage/components/tripList";
 import {Bookings} from "./components/bookings/components/bookingsList";
 import {Trip} from "./components/trip";
 import {ToastContainer} from "react-toastify";
+import {useAppSelector, useAppDispatch} from "./hooks/typedReduxHooks";
+import {auth as authActionCreator} from "./store/actions";
+import {Loader} from "./components/loader";
 
 
 function App() {
+
+    const dispatch = useAppDispatch();
+
+    const {status} = useAppSelector(({auth}) => ({
+        status: auth.status
+    }));
+
+    useEffect(() => {
+        dispatch(authActionCreator.getAuthenticatedUser())
+    }, [dispatch]);
+
+    if (status === 'pending') {
+        return (<Loader/>)
+    }
+
     return (
         <>
             <Header/>
-            <ToastContainer />
+            <ToastContainer/>
             <Routes>
                 <Route path="/" element={<MainPage/>}/>
                 <Route path='/sign-in' element={<SignIn/>}/>

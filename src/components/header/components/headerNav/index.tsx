@@ -1,8 +1,8 @@
+import {useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../../../hooks/typedReduxHooks";
-import {useEffect} from "react";
 import {showNotification} from "../../../../common/toastr/toastr";
-import {auth as authActionCreator, errors as errorActionCreator} from "../../../../store/actions";
+import {errors as errorActionCreator} from "../../../../store/actions";
 import briefcase from "../../../../images/briefcase.svg";
 import userImg from "../../../../images/user.svg";
 
@@ -22,15 +22,8 @@ export const Nav = () => {
 
 
     useEffect(() => {
-        if(!user.id) {
-            dispatch(authActionCreator.getAuthenticatedUser())
-        }
-    }, [dispatch, user]);
-
-
-    useEffect(() => {
         if (error_message) {
-            switch (error_message){
+            switch (error_message) {
                 case '401':
                     navigate("/sign-in", {replace: true});
                     break;
@@ -45,7 +38,10 @@ export const Nav = () => {
             }
             dispatch(errorActionCreator.clearError());
         }
-    }, [error_message, error_type, navigate, dispatch]);
+        if (!user.id) {
+            navigate("/sign-in", {replace: true});
+        }
+    }, [error_message, error_type, navigate, dispatch, user]);
 
 
     const onSignOut = () => {
