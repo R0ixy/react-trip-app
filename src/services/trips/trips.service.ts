@@ -21,7 +21,7 @@ export class TripsService extends BaseService {
 
     getById(id: string) {
         const token = this.getToken();
-        return this._http.load(this.getUrl(`/${id}`), {
+        return this._http.load(this.getUrl(`${id}`), {
 
             method: HttpMethod.GET,
             currentHeaders: {auth: `Bearer ${token}`},

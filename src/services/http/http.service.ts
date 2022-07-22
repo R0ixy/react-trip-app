@@ -23,10 +23,8 @@ export class Http {
             body: payload,
         })
             .then(this._checkStatus)
-            .then(response => response.json())
-            .catch(error => {
-                return Promise.reject(error);
-            });
+            .then(this._getJSON)
+            .catch(error => Promise.reject(error));
     }
 
 
@@ -36,7 +34,7 @@ export class Http {
         if (contentType) {
             headers.append('content-type', contentType);
         }
-        if(auth) {
+        if (auth) {
             headers.append('Authorization', auth);
         }
 
@@ -44,12 +42,21 @@ export class Http {
     }
 
     private _checkStatus(response: Response) {
-        const {ok, status, statusText} = response;
+        const {ok, status} = response;
 
         if (!ok) {
-            throw new Error(`${status}: ${statusText}`);
+            throw new Error(`${status}`);
         }
 
         return response;
+    }
+
+    private _getJSON(response: Response) {
+        if (response.status === 204) {
+            return response;
+        } else {
+            return response.json();
+        }
+
     }
 }

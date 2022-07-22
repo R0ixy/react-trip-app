@@ -14,25 +14,25 @@ export class AuthService extends BaseService {
     getAuthenticatedUser() {
         const token = this.getToken();
         if (token) {
-            return this._http.load(this.getUrl('/authenticated-user '), {
+            return this._http.load(this.getUrl('authenticated-user '), {
                 method: HttpMethod.GET,
                 currentHeaders: {auth: `Bearer ${token}`},
             });
         } else {
-            return Promise.reject('No token');
+            return Promise.reject('401');
         }
     }
 
-    signup(payload: iSignUp) {
-        return this._http.load(this.getUrl('/sign-up'), {
+    signUp(payload: iSignUp) {
+        return this._http.load(this.getUrl('sign-up'), {
             method: HttpMethod.POST,
             payload: JSON.stringify(payload),
             currentHeaders: {contentType: 'application/json'},
         });
     }
 
-    signin(payload: iSignIn) {
-        return this._http.load(this.getUrl('/sign-in'), {
+    signIn(payload: iSignIn) {
+        return this._http.load(this.getUrl('sign-in'), {
             method: HttpMethod.POST,
             payload: JSON.stringify(payload),
             currentHeaders: {contentType: 'application/json'},
