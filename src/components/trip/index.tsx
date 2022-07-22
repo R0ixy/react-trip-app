@@ -1,11 +1,10 @@
 import {useEffect, useState} from "react";
-import {useParams, useNavigate, Navigate} from 'react-router-dom';
+import {useParams, useNavigate, Navigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../hooks/typedReduxHooks";
 import {Modal} from "../modal";
 import {Loader} from "../loader";
 import {DataStatus} from "../../common/app/data-status.enum";
 import {trips as tripsActionCreator} from "../../store/actions";
-import {showNotification} from "../../common/toastr/toastr";
 
 export const Trip = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,19 +17,20 @@ export const Trip = () => {
         status: trips.status,
     }));
 
+    const {error_message, error_type} = useAppSelector(({errors}) => ({
+        error_message: errors.error_message,
+        error_type: errors.error_type,
+    }));
+
+
     useEffect(() => {
         if (id) {
-            dispatch(tripsActionCreator.fetchOneTrip({id}))
-                .unwrap()
-                .catch(e => {
-                    if (e.message === '404') {
-                        showNotification(`Page not found`, 'error');
-                    }
-                });
+            dispatch(tripsActionCreator.fetchOneTrip({id}));
         }
     }, [dispatch, id, navigate]);
 
-    if(status === DataStatus.ERROR) {
+
+    if (error_message === '404' && error_type === '/trip/rejected') {
         return (<Navigate to="/" replace={true}/>);
     }
 
