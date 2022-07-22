@@ -1,5 +1,6 @@
 import React from 'react';
 import './css/style.css';
+import 'react-toastify/dist/ReactToastify.css';
 import {Routes, Route, Navigate} from 'react-router-dom';
 import {Header} from "./components/header";
 import {Footer} from "./components/footer";
@@ -8,12 +9,14 @@ import {SignUp} from "./components/sign-up";
 import {MainPage} from "./components/mainPage/components/tripList";
 import {Bookings} from "./components/bookings/components/bookingsList";
 import {Trip} from "./components/trip";
+import {ToastContainer} from "react-toastify";
 
 
 function App() {
     return (
         <>
             <Header/>
+            <ToastContainer />
             <Routes>
                 <Route path="/" element={<MainPage/>}/>
                 <Route path='/sign-in' element={<SignIn/>}/>
