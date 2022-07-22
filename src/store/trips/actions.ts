@@ -1,7 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {ActionType} from "./common";
 import {TripsService} from "../../services/trips/trips.service";
-import {iTrip} from "../../components/mainPage/interfaces/iTrip";
+import {iTrip} from "../../interfaces/trips/iTrip";
 
 
 export const fetchTrips = createAsyncThunk<{ trips: iTrip[] }, void, { extra: { tripsService: TripsService } }>

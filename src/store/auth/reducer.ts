@@ -35,6 +35,7 @@ export const reducer = createReducer(initialState, (builder) => {
     });
 
     builder.addMatcher((action) => action.type.endsWith(ActionStatus.REJECTED), (state) => {
-        state.status = DataStatus.ERROR;
+        console.log('auth matcher');
+        state.status = 'auth/error';
     });
 });

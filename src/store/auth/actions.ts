@@ -6,20 +6,16 @@ import {iSignUp, iSignIn} from "../../interfaces/auth/iSignInUp";
 
 
 export const getAuthenticatedUser = createAsyncThunk<{ user: iUser }, void, { extra: { authService: AuthService } }>
-(ActionType.GET_AUTHENTICATED, async (_args, {extra,rejectWithValue}) => {
-
-        return ({
-            user: await extra.authService.getAuthenticatedUser()
-        })
-
-});
+(ActionType.GET_AUTHENTICATED, async (_args, {extra, rejectWithValue}) => ({
+    user: await extra.authService.getAuthenticatedUser()
+}));
 
 export const signUp = createAsyncThunk<{ result: iUserSignInUp }, iSignUp, { extra: { authService: AuthService } }>
 (ActionType.SIGN_UP, async ({email, password, fullName}, {extra}) => ({
-    result: await extra.authService.signup({email, password, fullName})
+    result: await extra.authService.signUp({email, password, fullName})
 }));
 
 export const signIn = createAsyncThunk<{ result: iUserSignInUp }, iSignIn, { extra: { authService: AuthService } }>
 (ActionType.SIGN_IN, async ({email, password}, {extra}) => ({
-    result: await extra.authService.signin({email, password})
+    result: await extra.authService.signIn({email, password})
 }));
